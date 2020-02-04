@@ -1,60 +1,88 @@
-const wordCollection = ['grit', 'creativity', 'impact', 'diversity', 'trust']
+/// All words, which can be guessed in the game.
+const wordCollection = ['grit', 'creativity', 'impact', 'diversity', 'trust'];
+
+/// The word, which is currently guessed.
 var currentWord;
+/// The letters, which were already guessed properly.
 var guessedLetters;
+/// The amount of wrong guesses yet.
 var wrongGuessCounter;
+/// The letters, which weren't correct.
 var missedLetters;
 
 $(document).ready(function() { 
-	resetGame();
+	startNewGame();
  });
 
-// Reset the whole game and start from new.
-function resetGame() {
+ /*
+ 	GAME LOGIC
+ */
+
+// Reset the whole game and start a new game. Resets game values and the UI.
+function startNewGame() {
 	// Reset all variables
+	resetGameState();
+
+	// Update UI
+	setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters);
+}
+
+// Resets the state
+function resetGameState() {
 	currentWord = wordCollection[Math.floor(Math.random() * wordCollection.length)];
 	guessedLetters = [];
 	missedLetters = [];
 	wrongGuessCounter = 0;
-
-	setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters);
 }
 
-// Guess a character and decide how gamec continues.
+// Guess a character and decide how game continues
 function guessCharacter(character) {
+	// The letter was correct
 	if (currentWord.includes(character)) {
 		guessedLetters += character;
 
-		console.log(currentWord);
-		console.log(guessedLetters);
+		// Decide wether the player has won
 
 		const currentWordAsSet = Array.from(new Set(currentWord.split('')));
 		const guessedLettersAsSet = Array.from(new Set(guessedLetters));
 
 		if (guessedLettersAsSet.length === currentWordAsSet.length) {
-			alert("You won! :D\nYou guessed the word '" + currentWord + "'.");
-			resetGame();
+			playerWon();
 		}
+	// The letter was not correct
 	} else {
 		wrongGuessCounter ++;
 		missedLetters += character;
 
+		// Decide wether the player has lost
+
 		if (wrongGuessCounter == hangman.length - 1) {
-			alert("Game Over! :(\nThe word was '" + currentWord + "'.");
-			resetGame();
+			playerLost();
 		}
 	}
 
+	// Update the UI
 	setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters);
+}
+
+function playerWon() {
+	alert("You won! :D\nYou guessed the word '" + currentWord + "'.");
+	startNewGame();
+}
+
+function playerLost() {
+	alert("Game Over! :(\nThe word was '" + currentWord + "'.");
+	startNewGame();
 }
 
 /*
 	UI
 */
 
-// Sets the whole UI.
+// Updates the whole UI
 function setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters) {
 	const giveUpButton = document.getElementById("giveUpButton");
-	giveUpButton.onclick = resetGame;
+	giveUpButton.onclick = startNewGame;
 
 	setHangmanField(wrongGuessCounter);
 	setWordField(currentWord, guessedLetters);
@@ -68,8 +96,10 @@ function setWordField(word, lettersDisplayed) {
 
 	const wordAsCharArray = word.split('');
 
+	// Construct the content of the word field
 	const censoredWord = wordAsCharArray
 	.map((character)=>{
+		// If the character was not guessed yet, hide it (display as `_`)
 		if (!lettersDisplayed.includes(character)) {
 			return '_';
 		}
@@ -89,17 +119,10 @@ function setLetterKeyboard(lettersDisplayed) {
 
 	const alphabetAsCharArray = alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
+	// Construct keyboard button for each character of the alphabet
 	alphabetAsCharArray.forEach((character)=>{
-		const upperChar = character.toUpperCase();
-
-		const letterButton = document.createElement("BUTTON"); 
-		letterButton.className += " letterKeyboardButton";
-		letterButton.innerHTML = upperChar;
-		letterButton.id = "letterKeyboardButton_" + upperChar;
-		letterButton.disabled = lettersDisplayed.includes(character);
-		letterButton.onclick = function() {
-			guessCharacter(character);
-		};
+		// Create a keyboard button for each letter of the alphabet
+		const letterButton = createLetterButton(character, lettersDisplayed.includes(character));
 
 		letterKeyboard.appendChild(letterButton);
 	});
@@ -121,7 +144,27 @@ function setHangmanField(index) {
 }
 
 /*
-	HANGMAN ASCII ART
+	UI Constructors
+*/
+
+function createLetterButton(character, disabled) {
+	const upperChar = character.toUpperCase();
+
+	const letterButton = document.createElement("BUTTON"); 
+
+	letterButton.className += " letterKeyboardButton";
+	letterButton.innerHTML = upperChar;
+	letterButton.id = "letterKeyboardButton_" + upperChar;
+	letterButton.disabled = disabled;
+	letterButton.onclick = function() {
+		guessCharacter(character);
+	};
+
+	return letterButton;
+}
+
+/*
+	HANGMAN ASCII ART (hardcoded)
 */
 
 const hangman = [`
