@@ -8,6 +8,7 @@ $(document).ready(function() {
 	resetGame();
  });
 
+// Reset the whole game and start from new.
 function resetGame() {
 	// Reset all variables
 	currentWord = wordCollection[Math.floor(Math.random() * wordCollection.length)];
@@ -18,6 +19,7 @@ function resetGame() {
 	setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters);
 }
 
+// Guess a character and decide how gamec continues.
 function guessCharacter(character) {
 	if (currentWord.includes(character)) {
 		guessedLetters += character;
@@ -49,6 +51,7 @@ function guessCharacter(character) {
 	UI
 */
 
+// Sets the whole UI.
 function setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters) {
 	const giveUpButton = document.getElementById("giveUpButton");
 	giveUpButton.onclick = resetGame;
@@ -103,12 +106,14 @@ function setLetterKeyboard(lettersDisplayed) {
 
 }
 
+/// Updates the missed letters label.
 function setMissedLettersLabel(missedLetters) {
 	const missedLettersLabel = document.getElementById("missedLettersLabel");
 
 	missedLettersLabel.innerHTML = "Missed Letters: " + String(missedLetters);
 } 
 
+/// Updates the hangman field.
 function setHangmanField(index) {
 	const hangmanField = document.getElementById("hangmanField");
 
