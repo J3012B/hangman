@@ -5,13 +5,14 @@ var wrongGuessCounter;
 var missedLetters;
 
 $(document).ready(function() { 
-	
-	const giveUpButton = document.getElementById("giveUpButton");
-
-	giveUpButton.onclick = resetGame;
-
+	setupUI();
 	resetGame();
  });
+
+ function setupUI() {
+	const giveUpButton = document.getElementById("giveUpButton");
+	giveUpButton.onclick = resetGame;
+ }
 
 function resetGame() {
 	// Reset all variables
@@ -39,7 +40,7 @@ function guessCharacter(character) {
 		const guessedLettersAsSet = Array.from(new Set(guessedLetters));
 
 		if (guessedLettersAsSet.length === currentWordAsSet.length) {
-			alert("You won! :D. You guessed the word '" + currentWord + "'.");
+			alert("You won! :D\nYou guessed the word '" + currentWord + "'.");
 			resetGame();
 		}
 	} else {
@@ -47,7 +48,7 @@ function guessCharacter(character) {
 		missedLetters += character;
 
 		if (wrongGuessCounter == hangman.length - 1) {
-			alert("Game Over! :(");
+			alert("Game Over! :(\nThe word was '" + currentWord + "'.");
 			resetGame();
 		}
 	}
