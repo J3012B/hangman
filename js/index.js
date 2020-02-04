@@ -20,6 +20,7 @@ function resetGame() {
 	missedLetters = [];
 	wrongGuessCounter = 0;
 
+	setHangmanField(wrongGuessCounter);
 	setWordField(currentWord, guessedLetters);
 	setLetterKeyboard(guessedLetters);
 	setMissedLettersLabel(missedLetters);
@@ -28,14 +29,30 @@ function resetGame() {
 }
 
 function guessCharacter(character) {
-	guessedLetters += character;
-
 	if (currentWord.includes(character)) {
+		guessedLetters += character;
 
+		console.log(currentWord);
+		console.log(guessedLetters);
+
+		const currentWordAsSet = Array.from(new Set(currentWord.split('')));
+		const guessedLettersAsSet = Array.from(new Set(guessedLetters));
+
+		if (guessedLettersAsSet.length === currentWordAsSet.length) {
+			alert("You won! :D. You guessed the word '" + currentWord + "'.");
+			resetGame();
+		}
 	} else {
+		wrongGuessCounter ++;
 		missedLetters += character;
+
+		if (wrongGuessCounter == hangman.length - 1) {
+			alert("Game Over! :(");
+			resetGame();
+		}
 	}
 
+	setHangmanField(wrongGuessCounter);
 	setWordField(currentWord, guessedLetters);
 	setLetterKeyboard(guessedLetters);
 	setMissedLettersLabel(missedLetters);
@@ -90,3 +107,77 @@ function setMissedLettersLabel(missedLetters) {
 
 	missedLettersLabel.innerHTML = "Missed Letters: " + String(missedLetters);
 } 
+
+function setHangmanField(index) {
+	const hangmanField = document.getElementById("hangmanField");
+
+	hangmanField.innerHTML = hangman[index];
+}
+
+/*
+	HANGMAN ASCII ART
+*/
+
+const hangman = [`
+&nbsp;&nbsp;+---+<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+=========<br>
+`,
+`
+&nbsp;&nbsp;+---+<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;O&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+=========
+`, 
+`
+&nbsp;&nbsp;+---+<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;O&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+=========<br>
+`,
+`
+&nbsp;&nbsp;+---+<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;O&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;/|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+=========<br>
+`, 
+`
+&nbsp;&nbsp;+---+<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;O&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;/|\\&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+=========<br>
+`, 
+`
+&nbsp;&nbsp;+---+<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;O&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;/|\\&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+=========<br>
+`, 
+`
+&nbsp;&nbsp;+---+<br>
+&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;O&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;/|\\&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;/&nbsp;\\&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br>
+=========<br>
+`];
