@@ -5,13 +5,17 @@ var wrongGuessCounter;
 var missedLetters;
 
 $(document).ready(function() { 
-	setupUI();
 	resetGame();
  });
 
- function setupUI() {
+ function setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters) {
 	const giveUpButton = document.getElementById("giveUpButton");
 	giveUpButton.onclick = resetGame;
+
+	setHangmanField(wrongGuessCounter);
+	setWordField(currentWord, guessedLetters);
+	setLetterKeyboard(guessedLetters);
+	setMissedLettersLabel(missedLetters);
  }
 
 function resetGame() {
@@ -21,12 +25,7 @@ function resetGame() {
 	missedLetters = [];
 	wrongGuessCounter = 0;
 
-	setHangmanField(wrongGuessCounter);
-	setWordField(currentWord, guessedLetters);
-	setLetterKeyboard(guessedLetters);
-	setMissedLettersLabel(missedLetters);
-
-	console.log(currentWord);
+	setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters);
 }
 
 function guessCharacter(character) {
@@ -53,10 +52,7 @@ function guessCharacter(character) {
 		}
 	}
 
-	setHangmanField(wrongGuessCounter);
-	setWordField(currentWord, guessedLetters);
-	setLetterKeyboard(guessedLetters);
-	setMissedLettersLabel(missedLetters);
+	setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters);
 }
 
 /// Takes a `word` and displays it through the word field, while the letters from `lettersDisplayed` are displayed already.
