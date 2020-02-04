@@ -8,16 +8,6 @@ $(document).ready(function() {
 	resetGame();
  });
 
- function setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters) {
-	const giveUpButton = document.getElementById("giveUpButton");
-	giveUpButton.onclick = resetGame;
-
-	setHangmanField(wrongGuessCounter);
-	setWordField(currentWord, guessedLetters);
-	setLetterKeyboard(guessedLetters);
-	setMissedLettersLabel(missedLetters);
- }
-
 function resetGame() {
 	// Reset all variables
 	currentWord = wordCollection[Math.floor(Math.random() * wordCollection.length)];
@@ -54,6 +44,20 @@ function guessCharacter(character) {
 
 	setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters);
 }
+
+/*
+	UI
+*/
+
+function setUI(wrongGuessCounter, currentWord, guessedLetters, missedLetters) {
+	const giveUpButton = document.getElementById("giveUpButton");
+	giveUpButton.onclick = resetGame;
+
+	setHangmanField(wrongGuessCounter);
+	setWordField(currentWord, guessedLetters);
+	setLetterKeyboard(guessedLetters);
+	setMissedLettersLabel(missedLetters);
+ }
 
 /// Takes a `word` and displays it through the word field, while the letters from `lettersDisplayed` are displayed already.
 function setWordField(word, lettersDisplayed) {
