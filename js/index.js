@@ -120,12 +120,9 @@ function setLetterKeyboard(lettersDisplayed) {
 	const alphabetAsCharArray = alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
 	// Construct keyboard button for each character of the alphabet
-	alphabetAsCharArray.forEach((character)=>{
-		// Create a keyboard button for each letter of the alphabet
-		const letterButton = createLetterButton(character, lettersDisplayed.includes(character));
-
-		letterKeyboard.appendChild(letterButton);
-	});
+	alphabetAsCharArray.forEach((character) => letterKeyboard.appendChild(
+		createLetterButton(character, lettersDisplayed.includes(character))
+	));
 
 }
 
